@@ -56,13 +56,21 @@ React.useEffect( () => {
     })
   };
 
+  const onExitFromRoom = () => {
+    dispatch({
+      type: 'UNJOINED',
+    })
+    // socket.emit('ROOM:UNJOIN', state.roomId, state.userName)
+    socket.disconnect();
+  }
+
   // window.socket = socket; Зачем это?
 
   return (
 <div className='wrapper'>
   {!state.joined ? (<JoinBlock onLogin={onLogin}/>) : (
     <>
-  <Chat {...state} onAddMessage={addMessage}/>
+  <Chat {...state} onAddMessage={addMessage} onExitFromRoom={onExitFromRoom}/>
   <TestComponentt {...state}/>
   </>
   )}
@@ -80,4 +88,9 @@ export default App;
 // Добавить пароли?
 // Если люди выходят с комнаты, то их переписка остается
 //Tailwind добавили с -D, т.е. только для разработки
-//Когда только 1 пользователь, показывает что их 0
+//Если слишком много сообщений то уходит вниз совсем, поправить стили
+//Когда только 1 пользователь, показывает что их 0, или нет???
+//Когда человек в списке комнат, новые появляющиеся в этот момент комнаты не отображаются
+//Если пытаются создать комнату которая уже существует то просто зайдет в нее
+//Сделали что при нажатии на "выйти из комнаты" разрывается сокет-соединение, мб не лучший вариант при нагрузке
+//Добавить удаление комнаты?

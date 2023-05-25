@@ -1,7 +1,7 @@
 import React from "react";
 import socket from "../socket";
 
-function Chat({users, messages, userName, roomId, onAddMessage}) {
+function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
     const [messageValue, setMessageValue ] = React.useState('');
     const messagesRef = React.useRef(null);
 
@@ -27,6 +27,8 @@ function Chat({users, messages, userName, roomId, onAddMessage}) {
         <div className="chat mb-4 mx-4 w-full ">
             <div className="chat-users border-b-2 border-gray-600">
                 Комната: <b>{roomId}</b>
+                <button className='btn btn-success border-2 border-blue-300 rounded-md p-0.5 my-2 font-bold ml-4'
+                onClick={onExitFromRoom}>Выйти из комнаты</button>
                 <hr />
                 <b>Онлайн ({users.length}):</b>
                 <ul>
@@ -34,6 +36,7 @@ function Chat({users, messages, userName, roomId, onAddMessage}) {
                 </ul>
             </div>
             <div className="chat-messages">
+                {/* Тут стили для прокрутки height-[100vw] overflow-scroll */}
                 <div ref={messagesRef} className="messages">
                     {
                         messages.map((message, index) => (

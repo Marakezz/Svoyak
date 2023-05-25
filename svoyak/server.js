@@ -36,10 +36,19 @@ app.post('/rooms', (req, res) => {
           ['messages', []],
         ]),
       );
+    } else {
+        console.log('Такая комната уже существует');
+        res.json('RoomIsAlreadyExist');
     }
     res.send();
     // console.log(req.body)
   });
+
+  app.get('/allRooms', (req, res) => {
+    const allRooms = [...rooms.keys()];
+    res.json(allRooms);
+    // console.log(allRooms);
+  })
 
 
 io.on('connection', (socket) => {
@@ -49,6 +58,18 @@ io.on('connection', (socket) => {
         const users = [...rooms.get(roomId).get('users').values()]; 
         socket.to(roomId).emit('ROOM:SET_USERS', users);
         // console.log(users); 
+    });
+
+    socket.on('ROOM:UNJOIN', (roomId, userName) => { //Пока не нужен
+        // socket.join(roomId); 
+        // rooms.get(roomId).get('users').set(socket.id, userName); 
+        // const users = [...rooms.get(roomId).get('users').values()]; 
+        // socket.to(roomId).emit('ROOM:SET_USERS', users);
+        // const obj = {
+        //     userName,
+        //     text: '----------Покинул чат------------'
+        // }
+        // socket.to(roomId).emit('ROOM:NEW_MESSAGE', obj );
     });
 
     
@@ -64,11 +85,21 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         rooms.forEach((value, roomId) => {//ищем определенную комнату (здесь в другом порядке value-значение, roomId - ключ)
             // console.log('Удалился ', value.get('users').get(socket.id)); сами прописали для теста
-            if(value.get('users').delete(socket.id)){ //это метод Map(а), возвращает тру если удалился, и фолс если нет
+            if(value.get('users').has(socket.id)){ 
+                const obj = {
+                    userName: value.get('users').get(socket.id),
+                    text: '----------Покинул чат----------'
+                }
+                socket.to(roomId).emit('ROOM:NEW_MESSAGE', obj );
+                if(value.get('users').size == 1) {
+                    console.log('Ушел последний пользователь из комнаты: ' + roomId) //Добавить удаление комнаты?
+                }
+                value.get('users').delete(socket.id)//это метод Map(а), возвращает тру если удалился, и фолс если нет
                 const users = [...value.get('users').values()]; 
                 socket.to(roomId).emit('ROOM:SET_USERS', users);
             }
         });
+        console.log('User DISconnected', socket.id);
     });
 
     socket.on('ROOM:CHANGE_COLOR', ({toggle, roomId}) => {

@@ -24,7 +24,7 @@ function TestComponentt({roomId}) {
 
         return() => { 
             socket.off('ROOM:CHANGE_COLOR', changeColor );
-        }}, [changeColor]);
+        }}, []);
 
     const testRef = React.useRef(null);
 
@@ -42,7 +42,6 @@ function TestComponentt({roomId}) {
             testRef.current.className = ' bg-blue-200 px-6 rounded-md border-2 border-pink-900 font-bold text-center text-red-700'
             console.log(toggle);
             changeColorToggle(toggle);
-    
         }
         else {
             testRef.current.className = 'bg-gray-200 px-6 rounded-md border-2 border-pink-900 font-bold text-center text-red-700'

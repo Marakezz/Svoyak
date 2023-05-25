@@ -8,6 +8,15 @@ export default (state, action) => {
                 roomId: action.payload.roomId,
             };
 
+            case 'UNJOINED': 
+            return {
+                ...state,
+                joined: false, 
+                roomId: null,
+                users: [],
+                messages: []
+            };
+
             case 'SET_DATA':  
             return {
                 ...state,
