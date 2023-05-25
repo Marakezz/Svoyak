@@ -3,9 +3,11 @@ import React from 'react';
 import socket from './socket';
 import JoinBlock from './components/JoinBlock';
 import Chat from './components/Chat';
+import RoomDetails from './components/RoomDetails';
 import reducer from './reducer';
 import axios from 'axios';
 import TestComponentt from './components/test';
+import GameDisplay from './components/GameDisplay';
 
 
 function App() {
@@ -70,9 +72,20 @@ React.useEffect( () => {
 <div className='wrapper'>
   {!state.joined ? (<JoinBlock onLogin={onLogin}/>) : (
     <>
-  <Chat {...state} onAddMessage={addMessage} onExitFromRoom={onExitFromRoom}/>
-  <TestComponentt {...state}/>
-  </>
+     <div 
+      className='
+        flex 
+        flex-col
+        md:flex-row
+        h-screen
+      '
+     >
+      <RoomDetails {...state} onExitFromRoom={onExitFromRoom} />
+      <GameDisplay />
+      <Chat {...state} onAddMessage={addMessage} onExitFromRoom={onExitFromRoom}/>
+      {/*<TestComponentt {...state}/>*/}
+     </div>
+    </>
   )}
   
   

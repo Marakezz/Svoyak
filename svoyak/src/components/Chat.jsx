@@ -1,5 +1,6 @@
 import React from "react";
 import socket from "../socket";
+import { AiOutlineArrowRight } from 'react-icons/ai';
 
 function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
     const [messageValue, setMessageValue ] = React.useState('');
@@ -24,45 +25,127 @@ function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom})
     }, [messages]);
 
     return (
-        <div className="chat mb-4 mx-4 w-full ">
-            <div className="chat-users border-b-2 border-gray-600">
-                Комната: <b>{roomId}</b>
-                <button className='btn btn-success border-2 border-blue-300 rounded-md p-0.5 my-2 font-bold ml-4'
-                onClick={onExitFromRoom}>Выйти из комнаты</button>
-                <hr />
-                <b>Онлайн ({users.length}):</b>
-                <ul>
-                    {users.map((name, index) => <li key={name + index}>Пользователь: {name}</li>)}
-                </ul>
+        //chat
+        <div
+            className="
+                flex
+                flex-col
+                border-l-2
+                border-gray-100
+                w-full
+                md:w-1/4
+                lg:w-1/5
+                h-1/2
+                md:h-screen
+            "
+        >  
+            {/* Top */}
+            <div
+                className="
+                    border-t-2
+                    border-b-2
+                    md:border-0
+                    md:border-b-2
+                    border-gray-100
+                    w-full
+                    flex
+                    flex-row
+                    justify-center
+                    p-4
+                    py-2
+                "
+            >
+                <div
+                    className="
+                        text-neutral-600
+                        text-base
+                        font-semibold
+                        text-center
+                    "
+                >
+                    Чат комнаты
+                </div>
             </div>
-            <div className="chat-messages">
-                {/* Тут стили для прокрутки height-[100vw] overflow-scroll */}
-                <div ref={messagesRef} className="messages">
-                    {
-                        messages.map((message, index) => (
-                        <div key={index} className="message flex flex-row">
-                            <span className=' mr-4'>{message.userName} : </span>
-                             <p className="font-bold font-sans text-blue-700">{message.text}</p>
-                             
+            <div 
+                ref={messagesRef}
+                className="
+                    border-b-2
+                    border-gray-100
+                    w-full
+                    flex
+                    flex-col
+                    py-1
+                    gap-1
+                    h-full
+                    overflow-y-auto
+                    scrolling-touch
+                "
+            >   
+                {
+                    messages.map((message, index) => (
+                        <div 
+                            key={index} 
+                            className="relative message px-2"
+                        >
+                            <span className='float-left font-semibold text-blue-700'>{message.userName}</span>
+                            <span className="text-black mr-2">:</span>
+                            <span className="text-black break-words">{message.text}</span>
                         </div>
                         ))
-                    }
-
-                </div>
-                <form>
-                    <textarea 
-                    className='form-control border-4 rounded-md bg-gray-300 w-2/3 '
+                }    
+            </div>
+            <div 
+                ref={messagesRef}
+                className="
+                    border-b-2
+                    border-gray-100
+                    w-full
+                    flex
+                    flex-row
+                    p-2
+                    gap-2
+                    bg-white
+                "
+            > 
+                <textarea 
+                    placeholder="Отправить сообщение"
+                    className="
+                        transition
+                        px-2
+                        py-2
+                        leading-tight
+                        border-2
+                        hover:border-2
+                        border-gray-200
+                        hover:border-blue-700
+                        rounded-md
+                        bg-white
+                        w-full
+                        resize-none
+                        hover:resize-y
+                        h-[40px]
+                        hover:max-h-[80px]
+                        overflow-hidden
+                        truncate 
+                    "
                     value={messageValue}
                     onChange={(e) => setMessageValue(e.target.value)}
-                    rows="3"></textarea>
-                    <button 
-                    onClick={onSendMessage}
-                    type='button'
-                    className="btn btn-primary">
-                        Отправить
-                    </button>
-                </form>
-            </div>
+                    rows="3"/>
+                <button 
+                        onClick={onSendMessage}
+                        type='button'
+                        className="
+                            transition
+                            py-2
+                            px-4
+                            bg-blue-700
+                            hover:opacity-70
+                            rounded
+                            text-white
+                        ">
+                        <AiOutlineArrowRight />
+                    </button>    
+                </div>
         </div>
     );
 

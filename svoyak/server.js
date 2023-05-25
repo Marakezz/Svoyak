@@ -78,8 +78,10 @@ io.on('connection', (socket) => {
             userName,
             text,
         }
-        rooms.get(roomId).get('messages').push(obj); //messages у нас просто массив
-        socket.to(roomId).emit('ROOM:NEW_MESSAGE', obj );
+        if ( rooms.get(roomId).get('messages') ) {
+            rooms.get(roomId).get('messages').push(obj); //messages у нас просто массив
+            socket.to(roomId).emit('ROOM:NEW_MESSAGE', obj );
+        }
     });
 
     socket.on('disconnect', () => {
