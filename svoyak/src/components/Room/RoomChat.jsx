@@ -1,10 +1,10 @@
 import React from "react";
-import socket from "../socket";
+import socket from "../../socket";
 
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { TbMicrophone2 } from 'react-icons/tb';
 
-function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
+function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
     const [messageValue, setMessageValue ] = React.useState('');
     const messagesRef = React.useRef(null);
 
@@ -165,25 +165,26 @@ function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom})
                     "
                     value={messageValue}
                     onChange={(e) => setMessageValue(e.target.value)}
-                    rows="3"/>
+                    rows="3"
+                />
                 <button 
-                        onClick={onSendMessage}
-                        type='button'
-                        className="
-                            transition
-                            py-2
-                            px-4
-                            bg-blue-700
-                            hover:opacity-70
-                            rounded
-                            text-white
-                        ">
+                    onClick={onSendMessage}
+                    type='button'
+                    className="
+                        transition
+                        py-2
+                        px-4
+                        bg-blue-700
+                        hover:opacity-70
+                        rounded
+                        text-white
+                    ">
                         <AiOutlineArrowRight />
-                    </button>    
-                </div>
+                </button>    
+            </div>
         </div>
     );
 
 }
 
-export default Chat;
+export default RoomChat;

@@ -1,5 +1,5 @@
 import React from "react";
-import socket from "../socket";
+import socket from "../../socket";
 
 import { FiUsers } from 'react-icons/fi';
 import { RiDeleteBin7Line } from 'react-icons/ri';

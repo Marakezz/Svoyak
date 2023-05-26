@@ -2,12 +2,12 @@ import './App.css';
 import React from 'react';
 import socket from './socket';
 import JoinBlock from './components/JoinBlock';
-import Chat from './components/Chat';
-import RoomDetails from './components/RoomDetails';
+import RoomChat from './components/Room/RoomChat';
+import RoomDetails from './components/Room/RoomDetails';
 import reducer from './reducer';
 import axios from 'axios';
 import TestComponentt from './components/test';
-import GameDisplay from './components/GameDisplay';
+import GameDisplay from './components/Room/GameDisplay';
 
 
 function App() {
@@ -82,7 +82,7 @@ React.useEffect( () => {
      >
       <RoomDetails {...state} onExitFromRoom={onExitFromRoom} />
       <GameDisplay />
-      <Chat {...state} onAddMessage={addMessage} onExitFromRoom={onExitFromRoom}/>
+      <RoomChat {...state} onAddMessage={addMessage} onExitFromRoom={onExitFromRoom}/>
       {/*<TestComponentt {...state}/>*/}
      </div>
     </>
