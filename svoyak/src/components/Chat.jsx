@@ -68,6 +68,8 @@ function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom})
                     Чат комнаты
                 </div>
             </div>
+
+            {/* Messages */}
             <div 
                 ref={messagesRef}
                 className="
@@ -125,6 +127,8 @@ function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom})
                         ))
                 }    
             </div>
+
+            {/* Form */}
             <div 
                 ref={messagesRef}
                 className="
