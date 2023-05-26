@@ -1,6 +1,8 @@
 import React from "react";
 import socket from "../socket";
+
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { TbMicrophone2 } from 'react-icons/tb';
 
 function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
     const [messageValue, setMessageValue ] = React.useState('');
@@ -74,20 +76,49 @@ function Chat({users, messages, userName, roomId, onAddMessage, onExitFromRoom})
                     w-full
                     flex
                     flex-col
-                    py-1
                     gap-1
                     h-full
                     overflow-y-auto
                     scrolling-touch
+                    p-1
                 "
             >   
                 {
                     messages.map((message, index) => (
                         <div 
                             key={index} 
-                            className="relative message px-2"
-                        >
-                            <span className='float-left font-semibold text-blue-700'>{message.userName}</span>
+                            className="
+                                message
+                                bg-white
+                                hover:bg-neutral-100
+                                rounded
+                                p-1
+                                transition
+                            "
+                        >   
+                            
+                            <span className='float-left'>
+                                <span className="flex flex-row gap-1">
+                                    {/* Добавить if(тип игрока = ведущий){показываем иконку} */}
+                                    <span 
+                                        title="Ведущий"
+                                        className="
+                                            rounded
+                                            bg-purple-600
+                                            text-white
+                                            text-sm
+                                            font-semibold
+                                            p-1
+                                            flex
+                                            justify-center
+                                            transition
+                                        "
+                                        >
+                                            <TbMicrophone2 size={16} className="inline-block my-auto"/>
+                                    </span> 
+                                    <span className="font-semibold text-blue-700">{message.userName}</span>
+                                </span>
+                            </span>
                             <span className="text-black mr-2">:</span>
                             <span className="text-black break-words">{message.text}</span>
                         </div>

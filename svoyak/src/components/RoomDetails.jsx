@@ -1,7 +1,10 @@
 import React from "react";
 import socket from "../socket";
+
 import { FiUsers } from 'react-icons/fi';
-import { BiLogOut } from 'react-icons/bi';
+import { RiDeleteBin7Line } from 'react-icons/ri';
+import { BiLogOut, BiCrown } from 'react-icons/bi';
+import { TbMicrophone2 } from 'react-icons/tb';
 
 function RoomDetails({
     roomId,
@@ -68,6 +71,7 @@ function RoomDetails({
                     flex
                     flex-row
                     justify-between
+                    align-middle
                 "
             > 
                 <div className="flex flex-col gap-0 w-4/5 md:w-auto truncate md:break-words">
@@ -121,8 +125,9 @@ function RoomDetails({
                     md:flex
                     flex-col
                     p-2
+                    px-1
                     gap-1
-                    h-screen
+                    h-full
                     overflow-y-auto
                 "
             >
@@ -131,6 +136,7 @@ function RoomDetails({
                         text-neutral-600
                         text-sm
                         font-semibold
+                        px-1
                     "
                 >
                     Список игроков
@@ -140,10 +146,61 @@ function RoomDetails({
                         <div 
                             className="
                                 flex
-                                text-base
-                                font-semibold
+                                flex-row
+                                justify-between
+                                align-middle
+                                bg-white
+                                hover:bg-neutral-100
+                                rounded
+                                p-1
+                                transition
                             " 
-                            key={name + index}>{name}
+                            key={name + index}>
+                                <div
+                                    className="
+                                        flex
+                                        flex-row
+                                        gap-1
+                                    " 
+                                >
+                                    {/* Добавить if(тип игрока = ведущий){показываем иконку} */} 
+                                    <span 
+                                        title="Ведущий"
+                                        className="
+                                            rounded
+                                            bg-purple-600
+                                            text-white
+                                            text-sm
+                                            font-semibold
+                                            p-1
+                                            flex
+                                            justify-center
+                                            transition
+                                        "
+                                    >
+                                        <TbMicrophone2 size={16} className="inline-block my-auto"/>
+                                    </span> 
+                                    <span className="text-base font-semibold">{name}</span>
+                                </div>
+                                {/* Добавить if(тип пользователя = ведущий, и данный игрок в списке не он){показываем кнопку удалить игрока} */} 
+                                <button
+                                    onClick={()=>{}}
+                                    className="
+                                        rounded
+                                        text-neutral-300
+                                        hover:text-rose-500
+                                        text-base
+                                        font-semibold
+                                        p-1
+                                        py-auto
+                                        flex
+                                        justify-center
+                                        transition
+                                    "
+                                >
+                                    <RiDeleteBin7Line className="inline-block my-auto"/>
+                                </button>
+
                         </div>
                     )}
                 </div>
