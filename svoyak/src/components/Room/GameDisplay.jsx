@@ -1,7 +1,8 @@
 import React from "react";
 import socket from "../../socket";
 
-function GameDisplay() {
+function GameDisplay({role}) {
+
     return( 
         <div 
             className="
@@ -15,7 +16,7 @@ function GameDisplay() {
                 md:h-[600px]
             "
         >
-
+            I am {role}
         </div>
     )
 }

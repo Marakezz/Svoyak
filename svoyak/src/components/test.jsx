@@ -3,7 +3,7 @@ import socket from "../socket";
 import reducer from '../reducer';
 
 
-function TestComponentt({roomId}) {
+function TestComponentt({roomName}) {
 
     // const [colorToggle, setColorToggle] = React.useState(true);
     const [state, dispatch] = React.useReducer(reducer, {
@@ -32,7 +32,7 @@ function TestComponentt({roomId}) {
         changeColor(state.colorToggle);
         const obj = {
             toggle: state.colorToggle,
-            roomId
+            roomName
         }
         socket.emit('ROOM:CHANGE_COLOR', obj);
     }

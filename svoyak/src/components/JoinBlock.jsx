@@ -6,7 +6,7 @@ import socket from '../socket';
 
 function JoinBlock({onLogin}) {
    
-    const [roomId, setRoomId] = React.useState('');
+    const [roomName, setRoomName] = React.useState('');
     const [userName, setUserName] = React.useState('');
     const [isLoading, setLoading] = React.useState(false);
     const [showAllRoomsToggle, setShowAllRoomsToggle] = React.useState(false);
@@ -15,7 +15,7 @@ function JoinBlock({onLogin}) {
 
     const showAllRooms = async () => {
         const data = await axios.get(`/allRooms`); 
-        setRoomId('');
+        setRoomName('');
         setShowAllRoomsToggle(true);
         setIsChosen(true);
         setAllRooms(data.data);
@@ -32,17 +32,18 @@ function JoinBlock({onLogin}) {
         }
     }
 
-    const onEnter = async () => {
-        if(!roomId || !userName){
+    const onMakeNewRoom = async () => {
+        if(!roomName || !userName){
            return alert('Неверные данные');
         }
         const obj =  {
-            roomId,
+            roomName,
             userName, 
+            role : 'admin'
         }
         setLoading(true);
         await axios.post('/rooms', obj).then((res) => {
-            if(res.data == 'RoomIsAlreadyExist'){
+            if(res.data === 'RoomIsAlreadyExist'){
                 alert('Такая комната уже существует');
                 setLoading(false);
             }  else {
@@ -51,14 +52,15 @@ function JoinBlock({onLogin}) {
         })
     };
 
-    const onEnter2 =  (name) => {
+    const onEnterToRoom =  (name) => {
         if(!userName){
            return alert('Неверные данные');
         }
-        setRoomId(name);
+        setRoomName(name);
         const obj =  {
-            roomId: name, //Стоит изменить(мб промисами) потому что функция почти как onEnter, но не успевает срабатывать смена стейта комнаты, перед подключением
+            roomName: name, //Стоит изменить(мб промисами) потому что функция почти как onEnter, но не успевает срабатывать смена стейта комнаты, перед подключением
             userName, 
+            role : 'player'
         }
         setLoading(true);
         // await axios.post('/rooms', obj); - нужен только для создания комнаты
@@ -81,7 +83,7 @@ function JoinBlock({onLogin}) {
                                 {allRooms.map((name, index) =>
                                     <li key={name + index}>
                                         Комната: {name}
-                                        <button onClick={() => onEnter2(name)}
+                                        <button onClick={() => onEnterToRoom(name)}
                                             className='btn btn-success border-2 border-blue-300 rounded-md p-0.5 ml-2 mb-1'>Присоединиться</button>
                                     </li>)}
                             </ul>
@@ -89,10 +91,10 @@ function JoinBlock({onLogin}) {
                         :
                         <div className="join-block text-center border-double border-b-8 mt-4">
                             <input className='border-2 border-blue-300 rounded-md p-0.5 mr-10'
-                                type="text" placeholder='Room ID' value={roomId} onChange={e => setRoomId(e.target.value)} />
+                                type="text" placeholder='Название комнаты' value={roomName} onChange={e => setRoomName(e.target.value)} />
                             <input className='border-2 border-blue-300 rounded-md p-0.5 mr-10'
                                 type="text" placeholder='Ваше имя' value={userName} onChange={e => setUserName(e.target.value)} />
-                            <button disabled={isLoading} onClick={onEnter}
+                            <button disabled={isLoading} onClick={onMakeNewRoom}
                                 className='btn btn-success border-2 border-blue-300 rounded-md p-0.5' >
                                 {isLoading ? 'Создаем...' : 'Создать комнату'}
                             </button>

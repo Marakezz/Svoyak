@@ -1,18 +1,21 @@
-export default (state, action) => {
+
+const reducer =  (state, action) => {
     switch (action.type) {
         case 'JOINED': 
             return {
                 ...state,
                 joined: true, 
                 userName: action.payload.userName,
-                roomId: action.payload.roomId,
+                roomName: action.payload.roomName,
+                role: action.payload.role,
             };
 
             case 'UNJOINED': 
             return {
                 ...state,
                 joined: false, 
-                roomId: null,
+                roomName: null,
+                role: null,
                 users: [],
                 messages: []
             };
@@ -36,6 +39,12 @@ export default (state, action) => {
                 messages: [...state.messages, action.payload],
             };
 
+            case 'SWAP_ROLE_TO': 
+                return {
+                    ...state,
+                    role: action.payload
+                }
+
             case 'CHANGE_COLOR':
                 return{
                     ...state,
@@ -46,3 +55,5 @@ export default (state, action) => {
             return state; //если ничего не передали то возвращает старое состояние
     }
 }
+
+export default reducer;

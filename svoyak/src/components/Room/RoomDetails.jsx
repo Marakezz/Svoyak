@@ -7,19 +7,17 @@ import { BiLogOut, BiCrown } from 'react-icons/bi';
 import { TbMicrophone2 } from 'react-icons/tb';
 
 function RoomDetails({
-    roomId,
+    roomName,
     users,
     userName,
-    onExitFromRoom
+    role,
+    onExitFromRoom,
+    deletePlayer,
+    makePlayerToAdmin,
+    changePoints
 }) {
-    const onSendMessage = () => {
-        socket.emit('ROOM:NEW_MESSAGE', {
-            roomId,
-            users,
-            userName,
-            onExitFromRoom
-        }); 
-    }
+
+// Вывести на экран имя игрока, чтоб он сам знал кто он) Используй userName
 
     return (
         <div
@@ -82,11 +80,9 @@ function RoomDetails({
                             font-semibold
                         "
                     >
-                        {roomId}
-                        {/* Лучше выводить название комнаты  */}
+                        Комната: {roomName}
                     </div>
                     <div className="flex flex-row gap-3">
-                        {/* Здесь можно выводить инфу о комнате, например, количество игроков, открытая/закрытая и тд. */}
                         <div className="flex flex-row gap-1 text-neutral-600 justify-center">
                             <FiUsers size={18} className="inline-block my-auto"/> <span className="inline-block text-base font-semibold align-middle">{users.length}</span>
                         </div>
@@ -142,7 +138,7 @@ function RoomDetails({
                     Список игроков
                 </div>
                 <div className="flex flex-col">
-                    {users.map((name, index) =>
+                    {users.map((user, index) =>
                         <div 
                             className="
                                 flex
@@ -155,7 +151,7 @@ function RoomDetails({
                                 p-1
                                 transition
                             " 
-                            key={name + index}>
+                            key={user.userName + index}>
                                 <div
                                     className="
                                         flex
@@ -163,28 +159,49 @@ function RoomDetails({
                                         gap-1
                                     " 
                                 >
-                                    {/* Добавить if(тип игрока = ведущий){показываем иконку} */} 
-                                    <span 
-                                        title="Ведущий"
-                                        className="
-                                            rounded
-                                            bg-purple-600
-                                            text-white
-                                            text-sm
-                                            font-semibold
-                                            p-1
-                                            flex
-                                            justify-center
-                                            transition
-                                        "
-                                    >
-                                        <TbMicrophone2 size={16} className="inline-block my-auto"/>
-                                    </span> 
-                                    <span className="text-base font-semibold">{name}</span>
+                                    {
+                                        (user.role==='admin')? (
+                                            <>
+                                            <span 
+                                            title="Ведущий"
+                                            className="
+                                                rounded
+                                                bg-purple-600
+                                                text-white
+                                                text-sm
+                                                font-semibold
+                                                p-1
+                                                flex
+                                                justify-center
+                                                transition
+                                            "
+                                        >
+                                            <TbMicrophone2 size={16} className="inline-block my-auto"/>
+                                        </span>
+                                        <span className="text-base font-semibold">{user.userName}</span>
+                                        </>
+                                        ) :
+                                        (<>
+                                        <span className="text-base font-semibold">{user.userName}</span>
+                                         {/* Сделать красивое значение очков игрока */}
+                                        <span className="text-base font-bold text-lime-600 ">Points: {user.points}</span>
+                                        </>)
+                                    }
+                                    
+
                                 </div>
-                                {/* Добавить if(тип пользователя = ведущий, и данный игрок в списке не он){показываем кнопку удалить игрока} */} 
-                                <button
-                                    onClick={()=>{}}
+            
+                                {((role==='admin')&&(user.role !== 'admin')) ? (
+                                    <>
+                                    <button
+                                    onClick={() => {
+                                        const obj = {
+                                            id: user.id,
+                                            userName: user.userName,
+                                            roomName
+                                        }
+                                        deletePlayer(obj)
+                                    }}
                                     className="
                                         rounded
                                         text-neutral-300
@@ -200,6 +217,37 @@ function RoomDetails({
                                 >
                                     <RiDeleteBin7Line className="inline-block my-auto"/>
                                 </button>
+
+                                    {/* Сделать красивую кнопку назначения админом */}
+                                    <button className='border-spacing-2 border-2'
+                                    onClick={() => {
+                                        const obj = {
+                                            roomName: roomName,
+                                            id: user.id,
+                                        }
+                                        makePlayerToAdmin(obj)
+                                    }}>
+                                        Сделать админом
+                                    </button>
+
+                                    {/* Сделать красивую кнопку изменения баллов (если она нужна здесь) */}
+                                    {/* И сделать ввод баллов, пока оставил просто статичное 999) */}
+                                    <button className='border-2'
+                                    onClick={() => {
+                                        const obj = {
+                                            amount: 999,
+                                            roomName: roomName,
+                                            id: user.id
+                                        }
+                                        changePoints(obj);
+                                    }}>
+                                        Баллы
+                                    </button>
+                                </>
+                                ):(
+                                    <></>
+                                )}
+
 
                         </div>
                     )}

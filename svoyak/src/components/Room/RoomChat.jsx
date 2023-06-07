@@ -4,7 +4,7 @@ import socket from "../../socket";
 import { AiOutlineArrowRight } from 'react-icons/ai';
 import { TbMicrophone2 } from 'react-icons/tb';
 
-function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRoom}) {
+function RoomChat({users, messages, userName, role, roomName, onAddMessage}) {
     const [messageValue, setMessageValue ] = React.useState('');
     const messagesRef = React.useRef(null);
 
@@ -12,11 +12,13 @@ function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRo
     const onSendMessage = () => {
         socket.emit('ROOM:NEW_MESSAGE', {
             userName,
-            roomId,
+            roomName,
+            role,
             text: messageValue
         }); 
         onAddMessage({
             userName,
+            role,
             text: messageValue
         });
         setMessageValue('');
@@ -101,23 +103,24 @@ function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRo
                             
                             <span className='float-left'>
                                 <span className="flex flex-row gap-1">
-                                    {/* Добавить if(тип игрока = ведущий){показываем иконку} */}
+                                    {(message.role==='admin')?(
                                     <span 
-                                        title="Ведущий"
-                                        className="
-                                            rounded
-                                            bg-purple-600
-                                            text-white
-                                            text-sm
-                                            font-semibold
-                                            p-1
-                                            flex
-                                            justify-center
-                                            transition
-                                        "
-                                        >
-                                            <TbMicrophone2 size={16} className="inline-block my-auto"/>
-                                    </span> 
+                                    title="Ведущий"
+                                    className="
+                                        rounded
+                                        bg-purple-600
+                                        text-white
+                                        text-sm
+                                        font-semibold
+                                        p-1
+                                        flex
+                                        justify-center
+                                        transition
+                                    "
+                                    >
+                                        <TbMicrophone2 size={16} className="inline-block my-auto"/>
+                                </span> 
+                                    ) : (<></>)}
                                     <span className="font-semibold text-blue-700">{message.userName}</span>
                                 </span>
                             </span>
@@ -130,7 +133,7 @@ function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRo
 
             {/* Form */}
             <div 
-                ref={messagesRef}
+             
                 className="
                     border-b-2
                     border-gray-100
@@ -168,7 +171,11 @@ function RoomChat({users, messages, userName, roomId, onAddMessage, onExitFromRo
                     rows="3"
                 />
                 <button 
-                    onClick={onSendMessage}
+                    onClick={() => {
+                        if(messageValue){
+                            onSendMessage()
+                        }
+                    }}
                     type='button'
                     className="
                         transition
